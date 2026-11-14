@@ -1,0 +1,15 @@
+<launch>
+  <arg name="i2c_bus" default="2"/>
+  <arg name="rate" default="100.0"/>
+  <arg name="frame_id" default="imu_link"/>
+  <arg name="gyro_bias_file" default="/workspace/calibration/gyro_bias.yaml"/>
+  <arg name="publish_mag" default="true"/>
+
+  <node pkg="imu_bmi088_qmc5883p" type="imu_node.py" name="imu_node" output="screen">
+    <param name="i2c_bus" value="$(arg i2c_bus)"/>
+    <param name="rate" value="$(arg rate)"/>
+    <param name="frame_id" value="$(arg frame_id)"/>
+    <param name="gyro_bias_file" value="$(arg gyro_bias_file)"/>
+    <param name="publish_mag" value="$(arg publish_mag)"/>
+  </node>
+</launch>

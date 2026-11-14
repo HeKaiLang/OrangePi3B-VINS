@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>stereo_camera</name>
+  <version>0.1.0</version>
+  <description>UVC side-by-side stereo camera splitter (3840x1080 -&gt; left/right)</description>
+  <maintainer email="dev@todo.todo">dev</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>cv_bridge</depend>
+</package>

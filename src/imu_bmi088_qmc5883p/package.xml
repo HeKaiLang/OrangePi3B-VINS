@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>imu_bmi088_qmc5883p</name>
+  <version>0.1.0</version>
+  <description>BMI088 IMU + QMC5883P magnetometer driver over /dev/i2c-2 (smbus2)</description>
+  <maintainer email="dev@todo.todo">dev</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+</package>
