@@ -1,0 +1,10 @@
+<launch>
+    <!-- BMI088 Allan 方差分析: 回放 bags/imu_allan.bag (120min@100Hz) 自动触发计算 -->
+    <node pkg="imu_utils" type="imu_an" name="imu_an" output="screen">
+        <param name="imu_topic" type="string" value="/imu/data"/>
+        <param name="imu_name" type="string" value="bmi088"/>
+        <param name="data_save_path" type="string" value="/workspace/calibration/imu_utils/"/>
+        <param name="max_time_min" type="int" value="115"/>
+        <param name="max_cluster" type="int" value="100"/>
+    </node>
+</launch>

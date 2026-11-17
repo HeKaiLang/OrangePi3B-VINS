@@ -1,0 +1,13 @@
+# vins_ws: track src only; keep catkin build artifacts out of git
+vins_ws/build/
+vins_ws/devel/
+vins_ws/logs/
+vins_ws/.catkin_tools/
+
+# dangling symlink left over from container path (/workspace/src)
+vins_ws/src/src
+
+# generic build artifacts
+build/
+devel/
+logs/
