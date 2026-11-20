@@ -11,3 +11,7 @@ vins_ws/src/src
 build/
 devel/
 logs/
+
+# data dir: ROS bags are large binary blobs, keep out of git
+bags/
+*.bag
