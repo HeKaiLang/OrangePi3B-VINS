@@ -1,0 +1,32 @@
+<launch>
+  <!-- 任务E本地录制: IMU + 双目(运行档1280x480) + 双路JPEG压缩 + rosbag落盘
+       产物为压缩bag(~600MB/2min), PC端用cookbag洗成raw后再喂kalibr
+       用法: roslaunch stereo_camera record_imucam.launch
+             可选: duration:=90 output:=/workspace/bags/xxx.bag -->
+  <arg name="duration" default="120"/>
+  <arg name="output" default="/workspace/bags/calib_imucam.bag"/>
+
+  <include file="$(find imu_bmi088_qmc5883p)/launch/imu.launch"/>
+
+  <node pkg="stereo_camera" type="stereo_node" name="stereo_camera" output="screen">
+    <param name="video_device" value="/dev/video0"/>
+    <param name="width" value="1280"/>
+    <param name="height" value="480"/>
+    <param name="fps" value="30"/>
+    <param name="out_width" value="0"/>
+    <param name="out_height" value="0"/>
+  </node>
+
+  <node pkg="image_transport" type="republish" name="repub_left" output="screen"
+        args="raw in:=/camera/left/image_raw compressed out:=/camera/left">
+    <param name="compressed/jpeg_quality" value="60"/>
+  </node>
+  <node pkg="image_transport" type="republish" name="repub_right" output="screen"
+        args="raw in:=/camera/right/image_raw compressed out:=/camera/right">
+    <param name="compressed/jpeg_quality" value="60"/>
+  </node>
+
+  <node pkg="rosbag" type="record" name="recorder" output="screen"
+        args="-O $(arg output) --duration=$(arg duration)
+              /camera/left/compressed /camera/right/compressed /imu/data"/>
+</launch>

@@ -1,0 +1,21 @@
+# BMI088 IMU 噪声参数 —— Kalibr 格式
+# 数据来源:
+#   噪声密度/偏置不稳定度: scripts/allan_fit.py 对 2h 静止 bag 直接拟合
+#     (陀螺: bags/imu_allan_v2.bag, ODR100/BW32 配置;
+#      加计: bags/imu_allan.bag,   默认 0xA8 配置)
+#   已与 imu_utils 交叉验证 (imu_utils 输出值 = 本表值 × √100, 两工具一致)
+#   随机游走: σ(τ) 曲线 +1/2 斜率段拟合
+#     (加计斜率 0.5 可信; 陀螺曲线无干净 +1/2 段, 取 z 轴拟合上界, 保守偏小)
+# 注意:
+#   * 若用 imu_utils 的 yaml 填 Kalibr, 记得 noise_density 除以 √采样率(10)
+# 补充：2026-11-17 PC端交叉验证通过, 维持本值 (allan_variance_ros 陀螺通道有缺陷,
+#       其 2.4e-5 为上界; PC 直接复算 2.1e-6; 三路径两两印证)
+#   * VINS-Fusion 配置的字面量与 Kalibr 单位约定不同, 见 calibration/vins_noise_note
+topic: /imu/data
+update_rate: 100.0
+
+gyroscope_noise_density: 1.52e-4   # rad/s/√Hz  (x/y/z: 1.41/1.21/1.95e-4)
+gyroscope_random_walk: 2.3e-6      # rad/s²/√Hz (暂定, z 轴上界, 待交叉验证)
+
+accelerometer_noise_density: 1.55e-3  # m/s²/√Hz  (x/y/z: 1.56/1.52/1.58e-3)
+accelerometer_random_walk: 1.1e-4     # m/s³/√Hz  (v1 bag 拟合, 斜率 0.5)

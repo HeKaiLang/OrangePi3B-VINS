@@ -1,0 +1,26 @@
+<launch>
+  <!-- 标定推流全链路: IMU + 双目(标定档) + 双路JPEG压缩, 单launch单master -->
+  <arg name="width" default="2160"/>
+  <arg name="height" default="1080"/>
+  <arg name="jpeg_quality" default="60"/>
+
+  <include file="$(find imu_bmi088_qmc5883p)/launch/imu.launch"/>
+
+  <node pkg="stereo_camera" type="stereo_node" name="stereo_camera" output="screen">
+    <param name="video_device" value="/dev/video0"/>
+    <param name="width" value="$(arg width)"/>
+    <param name="height" value="$(arg height)"/>
+    <param name="fps" value="30"/>
+    <param name="out_width" value="0"/>
+    <param name="out_height" value="0"/>
+  </node>
+
+  <node pkg="image_transport" type="republish" name="repub_left" output="screen"
+        args="raw in:=/camera/left/image_raw compressed out:=/camera/left">
+    <param name="compressed/jpeg_quality" value="$(arg jpeg_quality)"/>
+  </node>
+  <node pkg="image_transport" type="republish" name="repub_right" output="screen"
+        args="raw in:=/camera/right/image_raw compressed out:=/camera/right">
+    <param name="compressed/jpeg_quality" value="$(arg jpeg_quality)"/>
+  </node>
+</launch>

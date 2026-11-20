@@ -1,7 +1,9 @@
 # Radar_duoCamera — Orange Pi 3B 阿克曼底盘小车 VINS-Fusion 工作区
 
 硬件平台：Orange Pi 3B（RK3566, ARM64, Ubuntu 22.04 宿主机）
-传感器：UVC 双目同步相机（side-by-side 3840x1080@30fps, 基线 60mm）、
+传感器：UVC 双目同步相机（side-by-side 拼帧；3840x1080 实测仅 ~10fps 为固件上限；
+RK3566 解码算力下采用 1280x480 档 = 单目原生 640x480@30fps 作为 VINS 工作分辨率；
+标定录 bag 时可用 2160x1080 档（单目 1080x1080，管线 ~13fps，Kalibr 够用），基线 60mm）、
 BMI088 IMU + QMC5883P 罗盘（i2c-2）、ESP32 阿克曼底盘（不进 Docker）
 
 ## 目录结构

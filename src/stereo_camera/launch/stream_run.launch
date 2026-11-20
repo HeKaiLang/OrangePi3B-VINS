@@ -1,0 +1,27 @@
+<launch>
+  <!-- 运行档推流: 1280x480 拼帧 = 单目原生 640x480@30fps (任务E/上车运行用)
+       与 stream_calib.launch 的唯一区别是分辨率默认值 -->
+  <arg name="width" default="1280"/>
+  <arg name="height" default="480"/>
+  <arg name="jpeg_quality" default="60"/>
+
+  <include file="$(find imu_bmi088_qmc5883p)/launch/imu.launch"/>
+
+  <node pkg="stereo_camera" type="stereo_node" name="stereo_camera" output="screen">
+    <param name="video_device" value="/dev/video0"/>
+    <param name="width" value="$(arg width)"/>
+    <param name="height" value="$(arg height)"/>
+    <param name="fps" value="30"/>
+    <param name="out_width" value="0"/>
+    <param name="out_height" value="0"/>
+  </node>
+
+  <node pkg="image_transport" type="republish" name="repub_left" output="screen"
+        args="raw in:=/camera/left/image_raw compressed out:=/camera/left">
+    <param name="compressed/jpeg_quality" value="$(arg jpeg_quality)"/>
+  </node>
+  <node pkg="image_transport" type="republish" name="repub_right" output="screen"
+        args="raw in:=/camera/right/image_raw compressed out:=/camera/right">
+    <param name="compressed/jpeg_quality" value="$(arg jpeg_quality)"/>
+  </node>
+</launch>

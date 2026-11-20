@@ -107,11 +107,18 @@ class ImuNode:
         self.bus.write_byte_data(BMI088_ACC_ADDR, ACC_PWR_CTRL, 0x04)
         time.sleep(0.05)
         self.bus.write_byte_data(BMI088_ACC_ADDR, ACC_RANGE, 0x01)
+        # 输出率/带宽: ODR 100Hz + normal 带宽(40Hz)。
+        # 注意位布局: ODR 在低4位(0x08=100Hz), BW 在高4位(0x0A=normal),
+        # 故正确值 0xA8。曾误写 0xAC(=ODR 1600Hz), 100Hz 采样混叠使噪声翻倍。
+        self.bus.write_byte_data(BMI088_ACC_ADDR, 0x40, 0xA8)
         # 陀螺仪: 使能 → 量程 ±2000dps
         self.bus.write_byte_data(BMI088_GYRO_ADDR, GYRO_ENABLE, 0x00)
         self.bus.write_byte_data(BMI088_GYRO_ADDR, GYRO_RANGE, 0x00)
+        # ODR 100Hz + 带宽 32Hz (寄存器合法值 0x00~0x07, 高4位忽略;
+        # 默认 0x80 配置带宽超宽, 100Hz 采样会混叠)
+        self.bus.write_byte_data(BMI088_GYRO_ADDR, 0x10, 0x07)
         time.sleep(0.01)
-        rospy.loginfo('BMI088 初始化完成 (acc ±6g, gyro ±2000dps)')
+        rospy.loginfo('BMI088 初始化完成 (acc ±6g ODR100/BW40, gyro ±2000dps ODR100/BW32)')
 
     def _init_qmc5883p(self):
         self.bus.write_byte_data(QMC5883P_ADDR, QMC_SOFT_RESET, 0x01)

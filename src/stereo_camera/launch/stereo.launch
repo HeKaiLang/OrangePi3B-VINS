@@ -1,15 +1,19 @@
 <launch>
   <arg name="video_device" default="/dev/video0"/>
-  <arg name="width" default="3840"/>
-  <arg name="height" default="1080"/>
+  <!-- 工作档位（默认，VINS 运行用）: 1280x480 拼帧 = 单目原生 640x480。
+       RK3566 实测: 相机 30fps 稳定, 但 2160x1080 JPEG 解码+resize 单线程
+       仅 ~9fps (bench_cam 基准), 1280x480 档解码量为其 1/4 且无需 resize。 -->
+  <arg name="width" default="1280"/>
+  <arg name="height" default="480"/>
   <arg name="fps" default="30"/>
-  <!-- 降采样输出分辨率（单幅）。launch 默认降到 640x480 发布；
-       需要全分辨率 1920x1080 时设 out_width:=1920 out_height:=1080，
-       或 out_width:=0 关闭缩放。 -->
-  <arg name="out_width" default="640"/>
-  <arg name="out_height" default="480"/>
+  <!-- 输出分辨率（单幅）。0 = 不缩放, 直接发切分后的原生半幅。
+       标定模式(高分辨率录 bag)用:
+         roslaunch stereo_camera stereo.launch width:=2160 height:=1080
+       此时单目为 1080x1080 方幅, 降采样须保持宽高比 (如 640x640)。 -->
+  <arg name="out_width" default="0"/>
+  <arg name="out_height" default="0"/>
 
-  <node pkg="stereo_camera" type="stereo_node.py" name="stereo_camera" output="screen">
+  <node pkg="stereo_camera" type="stereo_node" name="stereo_camera" output="screen">
     <param name="video_device" value="$(arg video_device)"/>
     <param name="width" value="$(arg width)"/>
     <param name="height" value="$(arg height)"/>

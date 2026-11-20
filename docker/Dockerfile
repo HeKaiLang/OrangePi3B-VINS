@@ -101,6 +101,8 @@ RUN printf '#!/bin/bash\nset -e\nsource /opt/ros/noetic/setup.bash\nexec "$@"\n'
 
 USER ${USER_NAME}
 RUN echo 'source /opt/ros/noetic/setup.bash' >> "${HOME}/.bashrc" \
+ && echo 'source /workspace/vins_ws/devel/setup.bash 2>/dev/null || true' \
+        >> "${HOME}/.bashrc" \
  && echo 'cd /workspace/vins_ws 2>/dev/null || cd /workspace 2>/dev/null || true' \
         >> "${HOME}/.bashrc"
 
